@@ -1,9 +1,13 @@
-FROM oven/bun:latest
+FROM node:20-slim
 
 WORKDIR /app
 
-RUN bun add @delorenj/mcp-server-trello supergateway
+# Instala o mcp-server-trello
+RUN npm install @delorenj/mcp-server-trello
+
+# Cria o wrapper SSE
+COPY bridge.mjs .
 
 EXPOSE 8000
 
-CMD ["bunx", "supergateway", "--stdio", "bunx @delorenj/mcp-server-trello", "--port", "8000", "--oneSessionPerClient"]
+CMD ["node", "bridge.mjs"]
